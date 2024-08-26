@@ -63,6 +63,12 @@ static battle_projectile_damage_calc_angle() {
     return 0;
 }
 
+static handle_init_class66() {
+    auto damage = Dword(GetRegValue("esp") + 0x18);
+    Message("### Class66(damage=%d (0x%x))\n", damage, damage);
+    return 0;
+}
+
 static main() {
     Message("\n\n");
     AddBpt(0x00611D57);
@@ -88,6 +94,9 @@ static main() {
 
     AddBpt(0x0061ECEA);
     SetBptCnd(0x0061ECEA, "battle_projectile_damage_calc_angle()");
+    
+    AddBpt(0x00602A90);
+    SetBptCnd(0x00602A90, "handle_init_class66()");
 
     auto battles_allocated = get_battles_allocated();
     Message("Battles allocated: %d\n", battles_allocated);

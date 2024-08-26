@@ -42,6 +42,8 @@ static handle_insert_operation() {
         return 0; // Toggle piracy
     } else if (operation.opcode() == 0x0e) {
         return 0; // Attack ship
+    } else if (operation.opcode() == 0x12) {
+        return 1; // Captain stuff
     } else if (operation.opcode() == 0x61) {
         return 0; // Announce celebration
     } else if (operation.opcode() == 0x92) {
