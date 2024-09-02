@@ -12,7 +12,7 @@
 #include "class11.idc"
 #include "class22.idc"
 #include "class24.idc"
-#include "class55.idc"
+#include "local_map_ship.idc"
 #include "game_world.idc"
 #include "letter.idc"
 #include "ship.idc"
@@ -38,4 +38,8 @@ static patch_dbg_dword(address, value) {
     patch_dbg_byte(address+1, (value >> 8) & 0xff);
     patch_dbg_byte(address+2, (value >> 16) & 0xff);
     patch_dbg_byte(address+3, (value >> 24) & 0xff);
+}
+
+static ceililing_div(value, div) {
+    return (value + div-1) / div;
 }

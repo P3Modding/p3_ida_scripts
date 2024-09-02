@@ -35,6 +35,10 @@ class Ship {
         return Byte(this.address + 0x3f);
     }
 
+    get_sailors() {
+        return Word(this.address + 0x40);
+    }
+
     get_captain_index() {
         return Word(this.address + 0x42);
     }

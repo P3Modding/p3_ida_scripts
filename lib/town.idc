@@ -32,22 +32,40 @@ class Town {
         return Byte(this.address + 0x02c1);
     }
 
+    get_town_flags() {
+        return Dword(this.address + 0x2c8);
+    }
+
     get_citizens_total() {
         return Dword(this.address + 0x2d4);
+    }
+
+    get_beggar_flags() {
+        return Dword(this.address + 0x76c);
     }
 
     get_church() {
         return Church(this.address + 0x794);
     }
 
+    get_shipyard_experience() {
+        return Dword(this.address + 0x810);
+    }
+
+    get_shipyard_something() {
+        return float(Dword(this.address + 0x818));
+    }
+
     to_string() {
         return sprintf(
-            "Town(address=0x%08x, name=%s, town_index=0x%x, town_id=0x%x, citizens_total=%d, church=%s)",
+            "Town(address=0x%08x, name=%s, town_index=0x%x, town_id=0x%x, town_flags=0x%x, citizens_total=%d, beggar_flags=0x%x, church=%s)",
             this.address,
             get_town_name(this.get_town_index()),
             this.get_town_index(),
             this.get_town_id(),
+            this.get_town_flags(),
             this.get_citizens_total(),
+            this.get_beggar_flags(),
             this.get_church().to_string());
     }
 }
