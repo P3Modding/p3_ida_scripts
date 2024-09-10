@@ -12,13 +12,15 @@
 #include "class11.idc"
 #include "class22.idc"
 #include "class24.idc"
-#include "local_map_ship.idc"
 #include "game_world.idc"
 #include "letter.idc"
+#include "local_map_ship.idc"
+#include "operation.idc"
+#include "sea_battle_projectile.idc"
 #include "ship.idc"
 #include "timestamp.idc"
 #include "town.idc"
-#include "operation.idc"
+
 
 static break_at(offset, handler) {
     auto address = get_imagebase() + offset;

@@ -83,6 +83,10 @@ class Battle {
         return Dword(this.address + 0x668);
     }
 
+    get_projectile(index) {
+        return SeaBattleProjectile(Dword(Dword(this.address + 0x668) + index * 4));
+    }
+
     get_field_670_wind_direction() {
         return Byte(this.address + 0x670);
     }

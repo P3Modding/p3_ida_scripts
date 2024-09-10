@@ -17,6 +17,21 @@ static debug_ship(index) {
         }
     }
 
+    for (i = 0; i < 24;) {
+        auto w1 = ship_weapon_str(ship.get_weapon(i));
+        auto w2 = ship_weapon_str(ship.get_weapon(i+1));
+        str = str + w1 + w2;
+        i = i + 4;
+    }
+    str = str + "\n";
+    for (i = 2; i < 24;) {
+        w1 = ship_weapon_str(ship.get_weapon(i));
+        w2 = ship_weapon_str(ship.get_weapon(i+1));
+        str = str + w1 + w2;
+        i = i + 4;
+    }
+    str = str + "\n";
+
     // Captain
     auto captain = ship.get_captain();
     if (captain) {

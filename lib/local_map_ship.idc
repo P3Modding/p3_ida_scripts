@@ -19,7 +19,7 @@ class LocalMapShip {
         return Word(this.address + 0xe);
     }
 
-    get_field_11_distance_thing_1() {
+    get_field_11_direction() {
         return Byte(this.address + 0x11);
     }
 
@@ -49,13 +49,14 @@ class LocalMapShip {
 
     to_string() {
         return sprintf(
-            "LocalMapShip(address=0x%x, x=%d (0x%x), y=%d (0x%x), field_11=0x%x, speed=%d, sails_level_current=%d, field_12a=0x%02x, field_138=%d, sails_level_setting=%d)",
+            "LocalMapShip(address=0x%x, ship_index=0x%x, x=%d (0x%x), y=%d (0x%x), field_11_direction=0x%x, speed=%d, sails_level_current=%d, field_12a=0x%02x, field_138=%d, sails_level_setting=%d)",
             this.address,
+            this.get_ship_index(),
             this.get_x(),
             this.get_x(),
             this.get_y(),
             this.get_y(),
-            this.get_field_11_distance_thing_1(),
+            this.get_field_11_direction(),
             this.get_field_1c_speed(),
             this.get_sails_level_current(),
             this.get_field_12a(),

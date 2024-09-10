@@ -19,10 +19,21 @@ static handle_init_local_map_ship() {
 static handle_apply_battle_damage() {
     auto esp = GetRegValue("esp");
     auto damage = Dword(esp + 8);
+    auto a4 = Dword(esp + 0x10);
+    auto a4_str;
+    if (a4 == 0) {
+        a4_str = "None";
+    } else if (a4 == 1) {
+        a4_str = "Left";
+    } else if (a4 == 2) {
+        a4_str = "Right";
+    } else if (a4 == 3) {
+        a4_str = "Random";
+    }
     auto ecx = GetRegValue("ecx");
     auto local_map_ship = LocalMapShip(ecx);
     auto ship = get_ship_by_index(local_map_ship.get_ship_index());
-    Message("### Ship %s taking %d battle damage (LocalMapShip at 0x%x)\n", ship.to_string(), damage, ecx);
+    Message("### Ship %s taking %d battle damage (LocalMapShip at 0x%x), a4=%d (%s)\n", ship.to_string(), damage, ecx, a4, a4_str);
     return 0;
 }
 
@@ -52,8 +63,21 @@ static do_battle_projectile_damage_calcs_distance_fix() {
 
 static battle_projectile_damage_calc() {
     auto esp = GetRegValue("esp");
+    auto target_x = Word(esp + 0x4);
+    auto target_y = Word(esp + 0x8);
     auto raw_damage = Dword(esp + 0xc);
-    Message("### battle_projectile_damage_calc raw_damage=%d (0x%x)\n", raw_damage, raw_damage);
+    auto starboard = Dword(esp + 0x10);
+    auto a6 = Byte(esp + 0x14);
+    auto a7 = Byte(esp + 0x18);
+
+    Message(
+        "### battle_projectile_damage_calc tx=0x%x, ty=0x%x, raw_damage=%d (0x%x), a6=0x%x, a7=0x%x\n",
+        target_x,
+        target_y,
+        raw_damage,
+        raw_damage,
+        a6,
+        a7);
     return 0;
 }
 
@@ -83,6 +107,62 @@ static handle_tick_sea_battle_chunk() {
             battle.get_field_18_byte(a),
             battle.get_field_18_byte(b));
     }
+    return 0;
+}
+
+static handle_get_sea_battle_projectile_impact_direction() {
+    Message("######################### get_sea_battle_projectile_impact_direction\n");
+    auto battle = Battle(GetRegValue("ecx"));
+    auto esp = GetRegValue("esp");
+    auto projectile_index = Word(esp + 0x08);
+    auto projectile = battle.get_projectile(projectile_index);
+    auto local_map_ship_index = Word(esp + 0x0c);
+    Message("### %s (projectile_index=%d, local_map_ship_index=%d)\n", projectile.to_string(), projectile_index, local_map_ship_index);
+    return 0;
+}
+
+static handle_get_sea_battle_projectile_impact_direction_angle() {
+    auto ebp = GetRegValue("ebp");
+    auto battle = Battle(Dword(ebp + 0x3c - 8));
+    auto local_map_ship_index = Dword(ebp + 0xc);
+    auto local_map_ship = battle.get_local_map_ship(local_map_ship_index);
+    auto direction = local_map_ship.get_field_11_direction();
+    auto a = direction * 1.40625;
+    auto cos = (0.0 + Dword(ebp - 0x50)) / 65536.0;
+    auto sin = (0.0 + Dword(ebp - 0x44)) / 65536.0;
+    Message(
+        "### local_map_ship_index %d: a=%d° (0x%x), sin(a) = %.2f, cos(a) = %.2f\n",
+        local_map_ship_index,
+        a,
+        direction,
+        sin,
+        cos);
+    return 0;
+}
+
+static handle_get_sea_battle_projectile_impact_direction_delta_fix() {
+    auto ebp = GetRegValue("ebp");
+    auto dx = TO_LONG(Dword(ebp-0x20));
+    auto dy = TO_LONG(Dword(ebp-0x34));
+    Message(
+        "### dx=%d dy=%d\n",
+        dx,
+        dy);
+    return 0;
+}
+
+static handle_get_sea_battle_projectile_impact_direction_evaluation() {
+    auto hitbox_point = GetRegValue("ecx");
+    Message("### hitbox_point %d hit!\n", hitbox_point);
+    return 0;
+}
+
+static handle_get_sea_battle_projectile_impact_direction_hitbox_vec_loop() {
+    auto ebp = GetRegValue("ebp");
+    auto x = TO_LONG(Dword(ebp-0x28));
+    auto y = TO_LONG(Dword(ebp-0x04));
+    auto point = Byte(ebp-0x2d);
+    Message("### Hitbox point %d translated to (%d, %d)\n", point, x, y);
     return 0;
 }
 
@@ -118,6 +198,22 @@ static main() {
     AddBpt(0x00608850);
     SetBptCnd(0x00608850, "handle_tick_sea_battle_chunk()");
 
+    AddBpt(0x0060A73D);
+    SetBptCnd(0x0060A73D, "handle_get_sea_battle_projectile_impact_direction()");
+
+    AddBpt(0x0060A99E);
+    SetBptCnd(0x0060A99E, "handle_get_sea_battle_projectile_impact_direction_angle()");
+
+    AddBpt(0x0060AACA);
+    SetBptCnd(0x0060AACA, "handle_get_sea_battle_projectile_impact_direction_delta_fix()");
+
+    AddBpt(0x0060AD69);
+    SetBptCnd(0x0060AD69, "handle_get_sea_battle_projectile_impact_direction_evaluation()");
+
+    AddBpt(0x0060ACA3);
+    SetBptCnd(0x0060ACA3, "handle_get_sea_battle_projectile_impact_direction_hitbox_vec_loop()");
+    
+
     auto battles_allocated = get_battles_allocated();
     Message("Battles allocated: %d\n", battles_allocated);
 
@@ -131,12 +227,6 @@ static main() {
         for (i = 0; i < battle.get_local_map_ships_len(); i++) {
             auto local_map_ship = battle.get_local_map_ship(i);
             Message("  %s\n", local_map_ship.to_string());
-        }
-
-        Message("class62s:\n");
-        for (i = 0; i < battle.get_field_5a(); i++) {
-            auto class62 = battle.get_class62(i);
-            Message("  %s\n", class62.to_string());
         }
 
         /*
@@ -157,20 +247,11 @@ static main() {
             a and b are indexes of interacting things?
             f0x18 denotes the type? 0 is ship?
         */
+        auto mask_part_1;
+        auto mask_part_2;
+        auto mask;;
         if (battle.get_field_50()) {
             Message("field_50:\n");
-            
-            for (i = 0; i < battle.get_field_54(); i++) {
-                for (j = 0; j < ceililing_div(battle.get_field_54(), 32); j++) {
-                    auto mask_part_1 = battle.get_field_48_target(j, i);
-                    auto mask_part_2 = battle.get_field_4c_target(j, i);
-                    auto mask = mask_part_1 & mask_part_2;
-                    Message("(%02d, %02d) = 0x%08x ", i, j, mask);
-                }
-                Message("\n");
-            }
-            Message("\n");
-
             for (i = 0; i < battle.get_field_54(); i++) {
                 for (j = 0; j < ceililing_div(battle.get_field_54(), 32); j++) {
                     mask_part_1 = battle.get_field_48_target(j, i);
@@ -182,7 +263,6 @@ static main() {
                         auto a = i;
                         auto b = j * 32 + k;
                         if (is_set) {
-                            // is behind is not a zero, skip
                             if (!battle.get_field_18_byte(a)) {
                                 auto i1 = battle.get_field_1c_target(a);
                                 Message(

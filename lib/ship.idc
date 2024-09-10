@@ -95,3 +95,13 @@ class Ship {
             this.get_target_index_2());
     }
 }
+
+static ship_weapon_str(value) {
+    if (value == 0xff) {
+        return "-";
+    } else if (value == 0x07) {
+        return " ";
+    } else {
+        return sprintf("%d", value);
+    }
+}
