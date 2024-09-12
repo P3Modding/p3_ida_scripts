@@ -282,3 +282,49 @@ static main() {
         }
     }
 }
+
+static patch_sea_battle_ship_hitbox() {
+    // Snaikka
+    patch_byte(0x0067AB30 + 0, 0x00);
+    patch_byte(0x0067AB30 + 1, 0x00);
+    patch_byte(0x0067AB30 + 2, 0xc9);
+    patch_byte(0x0067AB30 + 3, 0xff);
+    patch_byte(0x0067AB30 + 4, 0x13);
+    patch_byte(0x0067AB30 + 5, 0x00);
+    patch_byte(0x0067AB30 + 6, 0xe1);
+    patch_byte(0x0067AB30 + 7, 0xff);
+    patch_byte(0x0067AB30 + 8, 0x13);
+    patch_byte(0x0067AB30 + 9, 0x00);
+    patch_byte(0x0067AB30 + 10, 0x2f);
+    patch_byte(0x0067AB30 + 11, 0x00);
+    patch_byte(0x0067AB30 + 12, 0xed);
+    patch_byte(0x0067AB30 + 13, 0xff);
+    patch_byte(0x0067AB30 + 14, 0x2f);
+    patch_byte(0x0067AB30 + 15, 0x00);
+    patch_byte(0x0067AB30 + 16, 0xed);
+    patch_byte(0x0067AB30 + 17, 0xff);
+    patch_byte(0x0067AB30 + 18, 0xe1);
+    patch_byte(0x0067AB30 + 19, 0xff);
+
+    // Crayer
+    patch_byte(0x0067AB30 + 20, 0x00);
+    patch_byte(0x0067AB30 + 21, 0x00);
+    patch_byte(0x0067AB30 + 22, 0xbe);
+    patch_byte(0x0067AB30 + 23, 0xff);
+    patch_byte(0x0067AB30 + 24, 0x15);
+    patch_byte(0x0067AB30 + 25, 0x00);
+    patch_byte(0x0067AB30 + 26, 0xdc);
+    patch_byte(0x0067AB30 + 27, 0xff);
+    patch_byte(0x0067AB30 + 28, 0x13);
+    patch_byte(0x0067AB30 + 29, 0x00);
+    patch_byte(0x0067AB30 + 30, 0x37);
+    patch_byte(0x0067AB30 + 31, 0x00);
+    patch_byte(0x0067AB30 + 32, 0xed);
+    patch_byte(0x0067AB30 + 33, 0xff);
+    patch_byte(0x0067AB30 + 34, 0x37);
+    patch_byte(0x0067AB30 + 35, 0x00);
+    patch_byte(0x0067AB30 + 36, 0xeb);
+    patch_byte(0x0067AB30 + 37, 0xff);
+    patch_byte(0x0067AB30 + 38, 0xdc);
+    patch_byte(0x0067AB30 + 39, 0xff);
+}
