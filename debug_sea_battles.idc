@@ -19,21 +19,21 @@ static handle_init_local_map_ship() {
 static handle_apply_battle_damage() {
     auto esp = GetRegValue("esp");
     auto damage = Dword(esp + 8);
-    auto a4 = Dword(esp + 0x10);
-    auto a4_str;
-    if (a4 == 0) {
-        a4_str = "None";
-    } else if (a4 == 1) {
-        a4_str = "Left";
-    } else if (a4 == 2) {
-        a4_str = "Right";
-    } else if (a4 == 3) {
-        a4_str = "Random";
+    auto impact_location = Dword(esp + 0x10);
+    auto impact_location_str;
+    if (impact_location == 0) {
+        impact_location_str = "None";
+    } else if (impact_location == 1) {
+        impact_location_str = "Left";
+    } else if (impact_location == 2) {
+        impact_location_str = "Right";
+    } else if (impact_location == 3) {
+        impact_location_str = "Random";
     }
     auto ecx = GetRegValue("ecx");
     auto local_map_ship = LocalMapShip(ecx);
     auto ship = get_ship_by_index(local_map_ship.get_ship_index());
-    Message("### Ship %s taking %d battle damage (LocalMapShip at 0x%x), a4=%d (%s)\n", ship.to_string(), damage, ecx, a4, a4_str);
+    Message("### Ship %s taking %d battle damage (LocalMapShip at 0x%x, %s)\n", ship.to_string(), damage, ecx, impact_location_str);
     return 0;
 }
 
@@ -45,7 +45,7 @@ static do_battle_projectile_damage_calcs() {
     auto x = Word(esp + 0x08);
     auto y = Word(esp + 0x0c);
 
-    Message("### Projectile damage calculations (%d, %d, %s)\n", x, y, local_map_ship.to_string());
+    Message("### Projectile damage calculations (x=%d, y=%d, %s)\n", x, y, local_map_ship.to_string());
     return 0;
 }
 
@@ -61,35 +61,29 @@ static do_battle_projectile_damage_calcs_distance_fix() {
     return 0;
 }
 
-static battle_projectile_damage_calc() {
+static handle_battle_projectile_damage_calc() {
     auto esp = GetRegValue("esp");
     auto target_x = Word(esp + 0x4);
     auto target_y = Word(esp + 0x8);
     auto raw_damage = Dword(esp + 0xc);
     auto starboard = Dword(esp + 0x10);
-    auto a6 = Byte(esp + 0x14);
-    auto a7 = Byte(esp + 0x18);
+    auto volley_projectile_index = Byte(esp + 0x14);
+    auto volley_size = Byte(esp + 0x18);
 
     Message(
-        "### battle_projectile_damage_calc tx=0x%x, ty=0x%x, raw_damage=%d (0x%x), a6=0x%x, a7=0x%x\n",
+        "### battle_projectile_damage_calc tx=0x%x, ty=0x%x, raw_damage=%d (0x%x), volley_projectile_index=0x%x, volley_size=0x%x\n",
         target_x,
         target_y,
         raw_damage,
         raw_damage,
-        a6,
-        a7);
+        volley_projectile_index,
+        volley_size);
     return 0;
 }
 
-static battle_projectile_damage_calc_angle() {
-    auto wind_angle = GetRegValue("eax");
-    Message("### wind_angle=%d (0x%x)\n", wind_angle, wind_angle);
-    return 0;
-}
-
-static handle_init_class66() {
+static handle_init_sea_battle_projectile() {
     auto damage = Dword(GetRegValue("esp") + 0x18);
-    Message("### Class66(damage=%d (0x%x))\n", damage, damage);
+    Message("### init_sea_battle_projectile(damage=%d)\n", damage);
     return 0;
 }
 
@@ -187,31 +181,28 @@ static main() {
     SetBptCnd(0x0061ED2A, "do_battle_projectile_damage_calcs_distance_fix()");
 
     AddBpt(0x006214CB);
-    SetBptCnd(0x006214CB, "battle_projectile_damage_calc()");
-
-    AddBpt(0x0061ECEA);
-    SetBptCnd(0x0061ECEA, "battle_projectile_damage_calc_angle()");
+    SetBptCnd(0x006214CB, "handle_battle_projectile_damage_calc()");
     
     AddBpt(0x00602A90);
-    SetBptCnd(0x00602A90, "handle_init_class66()");
+    SetBptCnd(0x00602A90, "handle_init_sea_battle_projectile()");
 
-    AddBpt(0x00608850);
-    SetBptCnd(0x00608850, "handle_tick_sea_battle_chunk()");
+    //AddBpt(0x00608850);
+    //SetBptCnd(0x00608850, "handle_tick_sea_battle_chunk()");
 
-    AddBpt(0x0060A73D);
-    SetBptCnd(0x0060A73D, "handle_get_sea_battle_projectile_impact_direction()");
+    //AddBpt(0x0060A73D);
+    //SetBptCnd(0x0060A73D, "handle_get_sea_battle_projectile_impact_direction()");
 
-    AddBpt(0x0060A99E);
-    SetBptCnd(0x0060A99E, "handle_get_sea_battle_projectile_impact_direction_angle()");
+    //AddBpt(0x0060A99E);
+    //SetBptCnd(0x0060A99E, "handle_get_sea_battle_projectile_impact_direction_angle()");
 
-    AddBpt(0x0060AACA);
-    SetBptCnd(0x0060AACA, "handle_get_sea_battle_projectile_impact_direction_delta_fix()");
+    //AddBpt(0x0060AACA);
+    //SetBptCnd(0x0060AACA, "handle_get_sea_battle_projectile_impact_direction_delta_fix()");
 
-    AddBpt(0x0060AD69);
-    SetBptCnd(0x0060AD69, "handle_get_sea_battle_projectile_impact_direction_evaluation()");
+    //AddBpt(0x0060AD69);
+    //SetBptCnd(0x0060AD69, "handle_get_sea_battle_projectile_impact_direction_evaluation()");
 
-    AddBpt(0x0060ACA3);
-    SetBptCnd(0x0060ACA3, "handle_get_sea_battle_projectile_impact_direction_hitbox_vec_loop()");
+    //AddBpt(0x0060ACA3);
+    //SetBptCnd(0x0060ACA3, "handle_get_sea_battle_projectile_impact_direction_hitbox_vec_loop()");
     
 
     auto battles_allocated = get_battles_allocated();
