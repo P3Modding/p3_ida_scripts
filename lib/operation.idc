@@ -1,6 +1,6 @@
 // 0x00
-class OperationMoveShip {
-    OperationMoveShip(address) {
+class OperationSetShipDestination {
+    OperationSetShipDestination(address) {
         this.address = address;
     }
 
@@ -22,7 +22,7 @@ class OperationMoveShip {
 
     to_string() {
         return form(
-            "OperationMoveShip(address=%x, ship_index=0x%x, town_index=0x%x, x=0x%x, y=0x%x)",
+            "OperationSetShipDestination(address=%x, ship_index=0x%x, town_index=0x%x, x=0x%x, y=0x%x)",
             this.address,
             this.get_ship_index(),
             this.get_town_index(),
@@ -178,13 +178,15 @@ class OperationStartSeaBattle {
 
 // Unknown
 class OperationUnknown {
-    OperationUnknown(address) {
+    OperationUnknown(address, opcode) {
         this.address = address;
+        this.opcode = opcode;
     }
     to_string() {
         return form(
-            "OperationUnknown(address=0x%x)",
-            this.address);
+            "OperationUnknown(address=0x%x, opcode=0x%x)",
+            this.address,
+            this.opcode);
     }
 }
 
@@ -210,7 +212,7 @@ class Operation {
     data() {
         auto opcode = this.opcode();
         if (opcode == 0x00) {
-            return OperationMoveShip(this.address + 0x04);
+            return OperationSetShipDestination(this.address + 0x04);
         } else if (opcode == 0x0d) {
             return OperationTogglePiracy(this.address + 0x04);
         } else if (opcode == 0x0e) {
@@ -222,7 +224,7 @@ class Operation {
         } else if (opcode == 0x9f) {
             return OperationStartSeaBattle(this.address + 0x04);
         } else {
-            return OperationUnknown(this.address + 0x04);
+            return OperationUnknown(this.address + 0x04, opcode);
         }
     }
     to_string() {

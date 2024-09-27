@@ -7,6 +7,10 @@ class Ship {
         return Byte(this.address + 0x00);
     }
 
+    get_next_ship_index() {
+        return Word(this.address + 0x06);
+    }
+
     get_max_health() {
         return Dword(this.address + 0x14);
     }
@@ -41,6 +45,10 @@ class Ship {
 
     get_captain_index() {
         return Word(this.address + 0x42);
+    }
+
+    get_unknown() {
+        return Byte(this.address + 0x136);
     }
 
     get_captain() {
@@ -78,9 +86,10 @@ class Ship {
 
     to_string() {
         return sprintf(
-            "Ship(address=0x%x, owner_index=0x%x, max_health=%u, current_health=%u, x=0x%x, y=0x%x, current_town_id=0x%x, damage_thing=%d, captain_index=0x%x, status=0x%x, ship_name=%s, is_pirate=%d, 0x%x 0x%x)",
+            "Ship(address=0x%x, owner_index=0x%x, next_index=%d, max_health=%u, current_health=%u, x=0x%x, y=0x%x, current_town_id=0x%x, damage_thing=%d, captain_index=0x%x, status=0x%x, ship_name=%s, is_pirate=%d, 0x%x 0x%x, unknown=%d)",
             this.address,
             this.get_owner_index(),
+            this.get_next_ship_index(),
             this.get_max_health(),
             this.get_current_health(),
             this.get_x(),
@@ -92,7 +101,9 @@ class Ship {
             this.get_ship_name(),
             this.get_is_pirate(),
             this.get_target_index_1(),
-            this.get_target_index_2());
+            this.get_target_index_2(),
+            this.get_unknown()
+        );
     }
 }
 

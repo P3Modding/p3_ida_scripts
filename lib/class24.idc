@@ -11,12 +11,22 @@ class Class24 {
         return Byte(this.address + 0x17);
     }
 
+    get_resolution_setting() {
+        return Byte(this.address + 0x1f);
+    }
+
+    get_colors_setting() {
+        return Byte(this.address + 0x20);
+    }
+
     to_string() {
         return sprintf(
-            "Class24(address=0x%x, battle_difficulty=%d, satisfaction_difficulty=%d)",
+            "Class24(address=0x%x, battle_difficulty=%d, satisfaction_difficulty=%d, resolution=%d, colors=%d)",
             this.address,
             this.get_battle_difficulty_setting(),
-            this.get_satisfaction_setting());
+            this.get_satisfaction_setting(),
+            this.get_resolution_setting(),
+            this.get_colors_setting());
     }
 }
 
