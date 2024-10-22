@@ -19,6 +19,8 @@ static handle_operation() {
     // Return 1 to break on an interesting op
     if (operation.opcode() == 0x00) {
         return 0; // Move ship
+    } if (operation.opcode() == 0x02) {
+        return 0; // Ship buy wares
     } else if (operation.opcode() == 0x39) {
         return 0; // Bath
     } else if (operation.opcode() == 0x43) {
@@ -40,10 +42,14 @@ static handle_insert_operation() {
     
     if (operation.opcode() == 0x0d) {
         return 0; // Toggle piracy
+    } else if (operation.opcode() == 0x02) {
+        return 0; // Ship buy wares
     } else if (operation.opcode() == 0x0e) {
         return 0; // Attack ship
     } else if (operation.opcode() == 0x12) {
         return 0; // Captain experience
+    } else if (operation.opcode() == 0x4b) {
+        return; // Accept alderman mission
     } else if (operation.opcode() == 0x61) {
         return 0; // Announce celebration
     } else if (operation.opcode() == 0x92) {

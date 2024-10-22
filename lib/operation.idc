@@ -31,6 +31,82 @@ class OperationSetShipDestination {
     }
 }
 
+// 0x01
+class OperationShipSellWares {
+    OperationShipSellWares(address) {
+        this.address = address;
+    }
+
+    get_amount() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_ware_id() {
+        return Word(this.address + 0x04);
+    }
+
+    get_ship_index() {
+        return Word(this.address + 0x06);
+    }
+
+    get_merchant_index() {
+        return Word(this.address + 0x08);
+    }
+
+    get_town_index() {
+        return Word(this.address + 0x0a);
+    }
+
+    to_string() {
+        return form(
+            "OperationShipSellWares(address=%x, amount=%d, ware_id=0x%x, ship_index=0x%x, merchant_index=0x%x, town_index=0x%x)",
+            this.address,
+            this.get_amount(),
+            this.get_ware_id(),
+            this.get_ship_index(),
+            this.get_merchant_index(),
+            this.get_town_index());
+    }
+}
+
+// 0x02
+class OperationShipBuyWares {
+    OperationShipBuyWares(address) {
+        this.address = address;
+    }
+
+    get_amount() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_ware_id() {
+        return Word(this.address + 0x04);
+    }
+
+    get_ship_index() {
+        return Word(this.address + 0x06);
+    }
+
+    get_merchant_index() {
+        return Word(this.address + 0x08);
+    }
+
+    get_town_index() {
+        return Word(this.address + 0x0a);
+    }
+
+    to_string() {
+        return form(
+            "OperationShipBuyWares(address=%x, amount=%d, ware_id=0x%x, ship_index=0x%x, merchant_index=0x%x, town_index=0x%x)",
+            this.address,
+            this.get_amount(),
+            this.get_ware_id(),
+            this.get_ship_index(),
+            this.get_merchant_index(),
+            this.get_town_index());
+    }
+}
+
 // 0x0d
 class OperationTogglePiracy {
     OperationTogglePiracy(address) {
@@ -213,12 +289,18 @@ class Operation {
         auto opcode = this.opcode();
         if (opcode == 0x00) {
             return OperationSetShipDestination(this.address + 0x04);
+        } else if (opcode == 0x01) {
+            return OperationShipSellWares(this.address + 0x04);
+        } else if (opcode == 0x02) {
+            return OperationShipBuyWares(this.address + 0x04);
         } else if (opcode == 0x0d) {
             return OperationTogglePiracy(this.address + 0x04);
         } else if (opcode == 0x0e) {
             return OperationAttackShip(this.address + 0x04);
         } else if (opcode == 0x61) {
             return OperationAnnounceCelebration(this.address + 0x04);
+        } else if (opcode == 0x85) {
+            return AldermanMission(this.address + 0x04);
         } else if (opcode == 0x92) {
             return OperationSeaBattleShipVolley(this.address + 0x04);
         } else if (opcode == 0x9f) {
