@@ -153,6 +153,39 @@ class OperationAttackShip {
     }
 }
 
+// 0x5b
+class OperationOfficeAutotradeChangeSetting {
+    OperationOfficeAutotradeChangeSetting(address) {
+        this.address = address;
+    }
+
+    get_stock() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_price() {
+        return TO_LONG(Dword(this.address + 0x04));
+    }
+
+    get_office_index() {
+        return TO_LONG(Dword(this.address + 0x08));
+    }
+
+    get_ware_id() {
+        return TO_LONG(Dword(this.address + 0x0c));
+    }
+
+    to_string() {
+        return form(
+            "OperationOfficeAutotradeChangeSetting(address=%x, stock=%d, price=%d, office_index=%d, ware=%s)",
+            this.address,
+            this.get_stock(),
+            this.get_price(),
+            this.get_office_index(),
+            ware_string(this.get_ware_id()));
+    }
+}
+
 // 0x61
 class OperationAnnounceCelebration {
     OperationAnnounceCelebration(address) {
@@ -183,6 +216,39 @@ class OperationAnnounceCelebration {
             this.get_timestamp(),
             this.get_town_index(),
             this.get_cost());
+    }
+}
+
+// 0x66
+class OperationOfficeAutotradeLock {
+    OperationOfficeAutotradeLock(address) {
+        this.address = address;
+    }
+
+    get_ware_id() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_merchant_index() {
+        return Dword(this.address + 0x04);
+    }
+
+    get_town_index() {
+        return Dword(this.address + 0x08);
+    }
+
+    get_lock() {
+        return Dword(this.address + 0x0c);
+    }
+
+    to_string() {
+        return form(
+            "OperationOfficeAutotradeLock(address=0x%x, ware=%s, merchant_index=0x%x, town_index=0x%x, lock=%d)",
+            this.address,
+            ware_string(this.get_ware_id()),
+            this.get_merchant_index(),
+            this.get_town_index(),
+            this.get_lock());
     }
 }
 
@@ -297,8 +363,12 @@ class Operation {
             return OperationTogglePiracy(this.address + 0x04);
         } else if (opcode == 0x0e) {
             return OperationAttackShip(this.address + 0x04);
+        } else if (opcode == 0x5b) {
+            return OperationOfficeAutotradeChangeSetting(this.address + 0x04);
         } else if (opcode == 0x61) {
             return OperationAnnounceCelebration(this.address + 0x04);
+        } else if (opcode == 0x66) {
+            return OperationOfficeAutotradeLock(this.address + 0x04);
         } else if (opcode == 0x85) {
             return AldermanMission(this.address + 0x04);
         } else if (opcode == 0x92) {

@@ -50,6 +50,8 @@ static handle_insert_operation() {
         return 0; // Captain experience
     } else if (operation.opcode() == 0x4b) {
         return; // Accept alderman mission
+    } else if (operation.opcode() == 0x5b) {
+        return 0; // Administrator prices
     } else if (operation.opcode() == 0x61) {
         return 0; // Announce celebration
     } else if (operation.opcode() == 0x92) {
