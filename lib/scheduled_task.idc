@@ -13,6 +13,44 @@ class ScheduledTaskUnknown {
     }
 }
 
+// 0x05
+class ScheduledTaskInvestigation {
+    ScheduledTaskInvestigation(address) {
+        this.address = address;
+    }
+
+    get_merchant_index() {
+        return Byte(this.address + 0x00);
+    }
+
+    get_town_index() {
+        return Byte(this.address + 0x01);
+    }
+
+    get_hometown_index() {
+        return Byte(this.address + 0x03);
+    }
+
+    get_crime_type() {
+        return Byte(this.address + 0x08);
+    }
+
+    get_verdict() {
+        return Byte(this.address + 0x09);
+    }
+
+    to_string() {
+        return form(
+            "ScheduledTaskInvestigation(address=%x, merchant_index=0x%x, town_index=0x%x, hometown_index=0x%x, crime_type=0x%x, verdict=%d)",
+            this.address,
+            this.get_merchant_index(),
+            this.get_town_index(),
+            this.get_hometown_index(),
+            this.get_crime_type(),
+            this.get_verdict());
+    }
+}
+
 class ScheduledTask {
     ScheduledTask(address) {
         this.address = address;
@@ -32,7 +70,9 @@ class ScheduledTask {
 
     get_data() {
         auto opcode = this.get_opcode();
-        if (opcode == 0x32) {
+        if (opcode == 0x05) {
+            return ScheduledTaskInvestigation(this.address + 0x08);
+        } else if (opcode == 0x32) {
             return AldermanMission(this.address + 0x08);
         } else {
             return ScheduledTaskUnknown(this.address + 0x08, opcode);

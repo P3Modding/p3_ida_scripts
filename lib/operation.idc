@@ -153,6 +153,53 @@ class OperationAttackShip {
     }
 }
 
+// 0x52
+class OperationTavernInteraction {
+    OperationTavernInteraction(address) {
+        this.address = address;
+    }
+
+    get_rand() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_merchant_index() {
+        return Dword(this.address + 0x04);
+    }
+
+    get_town_index() {
+        return Dword(this.address + 0x08);
+    }
+
+    get_interaction_type() {
+        return Dword(this.address + 0x0c);
+    }
+
+    to_string() {
+        auto details = "";
+        auto merchant_index = this.get_merchant_index();
+        auto town_index = this.get_town_index();
+        auto rand = this.get_rand();
+        auto town = get_town_by_index(town_index);
+        auto weaponsdealer_merchant = town.get_weaponsdealer_merchant();
+        auto interaction_type = this.get_interaction_type();
+
+        if (interaction_type == 6 && merchant_index == 0x24 && weaponsdealer_merchant == 0xff) {
+            auto failed_check = (rand & 0x3ff) < 102;
+            details = form(", is_illegal=true, failed_check=%d", failed_check);
+        }
+
+        return form(
+            "OperationTavernInteraction(address=%x, rand=%d, merchant_index=0x%x, town_index=0x%x, interaction_type=%d%s)",
+            this.address,
+            rand,
+            merchant_index,
+            town_index,
+            this.get_interaction_type(),
+            details);
+    }
+}
+
 // 0x5b
 class OperationOfficeAutotradeChangeSetting {
     OperationOfficeAutotradeChangeSetting(address) {
@@ -249,6 +296,34 @@ class OperationOfficeAutotradeLock {
             this.get_merchant_index(),
             this.get_town_index(),
             this.get_lock());
+    }
+}
+
+// 0x6c
+class OperationAudotradeRouteCreateOrLoad {
+    OperationAudotradeRouteCreateOrLoad(address) {
+        this.address = address;
+    }
+
+    get_ship_index() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_town_index() {
+        return Dword(this.address + 0x04);
+    }
+
+    get_stops_count() {
+        return Dword(this.address + 0x08);
+    }
+
+    to_string() {
+        return form(
+            "OperationAudotradeRouteCreateOrLoad(address=0x%x, ship_index=0x%x, town_index=0x%x, stops_count=0x%x)",
+            this.address,
+            this.get_ship_index(),
+            this.get_town_index(),
+            this.get_stops_count());
     }
 }
 
@@ -363,12 +438,16 @@ class Operation {
             return OperationTogglePiracy(this.address + 0x04);
         } else if (opcode == 0x0e) {
             return OperationAttackShip(this.address + 0x04);
+        } else if (opcode == 0x52) {
+            return OperationTavernInteraction(this.address + 0x04);
         } else if (opcode == 0x5b) {
             return OperationOfficeAutotradeChangeSetting(this.address + 0x04);
         } else if (opcode == 0x61) {
             return OperationAnnounceCelebration(this.address + 0x04);
         } else if (opcode == 0x66) {
             return OperationOfficeAutotradeLock(this.address + 0x04);
+        } else if (opcode == 0x6c) {
+            return OperationAudotradeRouteCreateOrLoad(this.address + 0x04);
         } else if (opcode == 0x85) {
             return AldermanMission(this.address + 0x04);
         } else if (opcode == 0x92) {

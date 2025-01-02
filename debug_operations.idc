@@ -48,8 +48,10 @@ static handle_insert_operation() {
         return 0; // Attack ship
     } else if (operation.opcode() == 0x12) {
         return 0; // Captain experience
+    } else if (operation.opcode() == 0x43) {
+        return 1; // Bribe
     } else if (operation.opcode() == 0x4b) {
-        return; // Accept alderman mission
+        return 0; // Accept alderman mission
     } else if (operation.opcode() == 0x5b) {
         return 0; // Administrator prices
     } else if (operation.opcode() == 0x61) {
