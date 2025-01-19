@@ -60,6 +60,10 @@ class Town {
         return Byte(this.address + 0x83d);
     }
 
+    get_loan_applicant(index) {
+        return LoanApplicant(this.address + 0x9d8 + index * 6);
+    }
+
     to_string() {
         return sprintf(
             "Town(address=0x%08x, name=%s, town_index=0x%x, town_id=0x%x, town_flags=0x%x, citizens_total=%d, beggar_flags=0x%x, church=%s)",

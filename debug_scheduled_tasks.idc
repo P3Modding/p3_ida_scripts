@@ -1,6 +1,17 @@
 #include <idc.idc>
 #include "lib/lib.idc"
 
+static handle_scheduled_task() {
+    auto edi = GetRegValue("edi");
+    auto task = ScheduledTask(edi);
+    if (task.get_opcode() == 1) {
+        Message("handle_scheduled_task %s\n", task.to_string());
+        if (task.get_data().get_receiving_index() == 0x24) {
+            return 1;
+        }
+    }
+}
+
 static handle_schedule_task() {
     auto ptr = GetRegValue("eax");
     auto opcode_addr = ptr + 6;
@@ -33,7 +44,7 @@ static handle_reschedule_task() {
     }
     Message("Rescheduling %s\n", task.to_string());
     if (task.get_opcode() == 0x5) {
-        return 1;
+        return 0; // Criminal Investigation
     }
 }
 
@@ -44,6 +55,8 @@ static debug_tasks() {
         auto task = get_task_by_index(task_index);
         if (task.get_opcode() == 0x32) {
             Message("%s\n", task.to_string());
+        } else if (task.get_opcode() == 0x1) {
+            Message("%s\n", task.to_string());
         }
         task_index = task.get_next_task_index();
     }
@@ -51,9 +64,12 @@ static debug_tasks() {
 }
 
 static main() {
-    auto bp = AddBpt(0x004D8DA3);
-    SetBptCnd(0x004D8DA3, "handle_schedule_task()");
+    AddBpt(0x004D85FC);
+    SetBptCnd(0x004D85FC, "handle_scheduled_task()");
 
-    AddBpt(0x004D8DE7);
-    SetBptCnd(0x004D8DE7, "handle_reschedule_task()");
+    //AddBpt(0x004D8DA3);
+    //SetBptCnd(0x004D8DA3, "handle_schedule_task()");
+
+    //AddBpt(0x004D8DE7);
+    //SetBptCnd(0x004D8DE7, "handle_reschedule_task()");
 }

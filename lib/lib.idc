@@ -9,6 +9,7 @@
 #define CLASS48_PTR_ADDRESS                             0x006CC7E0
 #define CLASS73_PTR_ADDRESS                             0x006CBA64
 #define CLASS75_ADDRESS                                 0x006DA820
+#define UI_MONEY_LENDER_WINDOW_PTR_ADDRESS              0x006E5534
 #define STATIC_UI_SHIPYARD_WINDOW_PTR_ADDRESS           0x006E55C0
 #define UI_TOWN_HALL_SIDEMENU_PTR_ADDRESS               0x006E5500
 #define UI_TOWN_HALL_WINDOW_PTR_ADDRESS                 0x006E558C
@@ -28,16 +29,21 @@
 #include "class74.idc"
 #include "class75.idc"
 #include "class77.idc"
+#include "class84.idc"
+#include "class85.idc"
 #include "game_world.idc"
 #include "letter.idc"
+#include "loan_applicant.idc"
 #include "local_map_ship.idc"
 #include "operation.idc"
+#include "operations.idc"
 #include "scheduled_task.idc"
 #include "screen_rectangle.idc"
 #include "sea_battle_projectile.idc"
 #include "ship.idc"
 #include "timestamp.idc"
 #include "town.idc"
+#include "ui_money_lender_window.idc"
 #include "ui_shipyard_window.idc"
 #include "ui_town_hall_sidemenu.idc"
 #include "ui_town_hall_window.idc"

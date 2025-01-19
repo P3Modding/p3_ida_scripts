@@ -153,6 +153,49 @@ class OperationAttackShip {
     }
 }
 
+// 0x29
+class OperationGrantLoan {
+    OperationGrantLoan(address) {
+        this.address = address;
+    }
+
+    get_repay_amount() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_is_insolvent() {
+        return Byte(this.address + 0x04);
+    }
+
+    get_amount() {
+        return Word(this.address + 0x08);
+    }
+
+    get_weeks() {
+        return Byte(this.address + 0x0a);
+    }
+
+    get_loan_result() {
+        return Byte(this.address + 0x0b);
+    }
+
+    get_town_index() {
+        return Byte(this.address + 0x0e);
+    }
+
+    to_string() {
+        return form(
+            "OperationGrantLoan(address=0x%x, repay_amount=%d, is_insolvent=0x%x, amount=%d, weeks=%d, loan_result=0x%x, town_index=0x%x)",
+            this.address,
+            this.get_repay_amount(),
+            this.get_is_insolvent(),
+            this.get_amount(),
+            this.get_weeks(),
+            this.get_loan_result(),
+            this.get_town_index());
+    }
+}
+
 // 0x52
 class OperationTavernInteraction {
     OperationTavernInteraction(address) {
@@ -184,7 +227,7 @@ class OperationTavernInteraction {
         auto weaponsdealer_merchant = town.get_weaponsdealer_merchant();
         auto interaction_type = this.get_interaction_type();
 
-        if (interaction_type == 6 && merchant_index == 0x24 && weaponsdealer_merchant == 0xff) {
+        if (interaction_type == 6 && merchant_index >= 0x24 && weaponsdealer_merchant == 0xff) {
             auto failed_check = (rand & 0x3ff) < 102;
             details = form(", is_illegal=true, failed_check=%d", failed_check);
         }
@@ -438,6 +481,8 @@ class Operation {
             return OperationTogglePiracy(this.address + 0x04);
         } else if (opcode == 0x0e) {
             return OperationAttackShip(this.address + 0x04);
+        } else if (opcode == 0x29) {
+            return OperationGrantLoan(this.address + 0x04);
         } else if (opcode == 0x52) {
             return OperationTavernInteraction(this.address + 0x04);
         } else if (opcode == 0x5b) {
