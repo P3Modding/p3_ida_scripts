@@ -163,8 +163,12 @@ class OperationGrantLoan {
         return Dword(this.address + 0x00);
     }
 
-    get_is_insolvent() {
+    get_interest_rate() {
         return Byte(this.address + 0x04);
+    }
+
+    get_rank() {
+        return Byte(this.address + 0x05);
     }
 
     get_amount() {
@@ -179,20 +183,36 @@ class OperationGrantLoan {
         return Byte(this.address + 0x0b);
     }
 
+    get_giving_merchant_index() {
+        return Byte(this.address + 0x0c);
+    }
+
+    get_receiving_merchant_index() {
+        return Byte(this.address + 0x0d);
+    }
+
     get_town_index() {
         return Byte(this.address + 0x0e);
     }
 
+    get_wtf() {
+        return Byte(this.address + 0x0f);
+    }
+
     to_string() {
         return form(
-            "OperationGrantLoan(address=0x%x, repay_amount=%d, is_insolvent=0x%x, amount=%d, weeks=%d, loan_result=0x%x, town_index=0x%x)",
+            "OperationGrantLoan(address=0x%x, repay_amount=%d, interest_rate=%d, rank=%d, amount=%d, weeks=%d, loan_result=0x%x, giving_merchant_index=0x%x, receiving_merchant_index=0x%x, town_index=0x%x, wtf=0x%x)",
             this.address,
             this.get_repay_amount(),
-            this.get_is_insolvent(),
+            this.get_interest_rate(),
+            this.get_rank(),
             this.get_amount(),
             this.get_weeks(),
             this.get_loan_result(),
-            this.get_town_index());
+            this.get_giving_merchant_index(),
+            this.get_receiving_merchant_index(),
+            this.get_town_index(),
+            this.get_wtf());
     }
 }
 

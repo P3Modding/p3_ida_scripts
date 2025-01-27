@@ -7,6 +7,10 @@ class UIMoneyLenderWindow {
         return OperationGrantLoan(this.address + 0xf5c + index * 0x10);
     }
 
+    get_next_loan_index() {
+        return Dword(this.address + 0xfd0);
+    }
+
     to_string() {
         return sprintf(
             "UIMoneyLenderWindow(address=0x%x)",

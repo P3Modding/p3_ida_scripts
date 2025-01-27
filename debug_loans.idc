@@ -12,7 +12,7 @@ static debug_bremen_loans() {
 
     Message("Window:\n");
     auto window = get_ui_money_lender_window();
-    for (i=0; i<3; i++) {
+    for (i=0; i<window.get_next_loan_index(); i++) {
         auto loan = window.get_grant_loan(i);
         Message("    %s\n", loan.to_string());
     }
