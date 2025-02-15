@@ -27,6 +27,8 @@ static handle_operation() {
         return 0; // Bath
     } else if (operation.opcode() == 0x43) {
         return 0; // Bath house bribe
+    } else if (operation.opcode() == 0x48) {
+        return 0; // Make Town Hall Offer
     } else if (operation.opcode() == 0x61) {
         return 0; // Announce celebration
     } else if (operation.opcode() == 0x6c) {
@@ -58,6 +60,8 @@ static handle_insert_operation() {
         return 0; // Repay loan
     } else if (operation.opcode() == 0x43) {
         return 0; // Bribe
+    } else if (operation.opcode() == 0x48) {
+        return 0; // Make Town Hall Offer
     } else if (operation.opcode() == 0x4b) {
         return 0; // Accept alderman mission
     } else if (operation.opcode() == 0x5b) {

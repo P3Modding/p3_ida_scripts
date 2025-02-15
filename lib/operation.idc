@@ -216,6 +216,33 @@ class OperationGrantLoan {
     }
 }
 
+// 0x48
+class OperationMakeTownHallOffer {
+    OperationMakeTownHallOffer(address) {
+        this.address = address;
+    }
+
+    get_meeting_timestamp() {
+        return Byte(this.address + 0x00);
+    }
+
+    get_town_index() {
+        return Byte(this.address + 0x08);
+    }
+
+    get_meeting_type() {
+        return Byte(this.address + 0x09);
+    }
+
+    to_string() {
+        return form(
+            "OperationMakeTownHallOffer(address=%x, town_index=0x%x, meeting_type=%d)",
+            this.address,
+            this.get_town_index(),
+            this.get_meeting_type());
+    }
+}
+
 // 0x52
 class OperationTavernInteraction {
     OperationTavernInteraction(address) {
@@ -503,6 +530,8 @@ class Operation {
             return OperationAttackShip(this.address + 0x04);
         } else if (opcode == 0x29) {
             return OperationGrantLoan(this.address + 0x04);
+        } else if (opcode == 0x48) {
+            return OperationMakeTownHallOffer(this.address + 0x04);
         } else if (opcode == 0x52) {
             return OperationTavernInteraction(this.address + 0x04);
         } else if (opcode == 0x5b) {

@@ -118,6 +118,52 @@ class ScheduledTaskInvestigation {
     }
 }
 
+// 0x2e
+class ScheduledTaskCouncilMeeting {
+    ScheduledTaskCouncilMeeting(address) {
+        this.address = address;
+    }
+
+    get_extra_tax_amount() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_town_index() {
+        return Byte(this.address + 0x04);
+    }
+
+    get_meeting_type() {
+        return Byte(this.address + 0x05);
+    }
+
+    get_field_6() {
+        return Byte(this.address + 0x06);
+    }
+
+    get_votes_remaining() {
+        return Byte(this.address + 0x07);
+    }
+
+    get_votes_in_favour() {
+        return Byte(this.address + 0x08);
+    }
+
+    get_votes_against() {
+        return Byte(this.address + 0x09);
+    }
+
+    to_string() {
+        return form(
+            "ScheduledTaskCouncilMeeting(address=0x%x, meeting_type=%d, field_6=0x%x, remaining=%d, yes=%d, no=%d)",
+            this.address,
+            this.get_meeting_type(),
+            this.get_field_6(),
+            this.get_votes_remaining(),
+            this.get_votes_in_favour(),
+            this.get_votes_against());
+    }
+}
+
 class ScheduledTask {
     ScheduledTask(address) {
         this.address = address;
@@ -141,7 +187,9 @@ class ScheduledTask {
             return ScheduledTaskRepayment(this.address + 0x08);
         } else if (opcode == 0x05) {
             return ScheduledTaskInvestigation(this.address + 0x08);
-        } else if (opcode == 0x32) {
+        } else if (opcode == 0x2e) {
+            return ScheduledTaskCouncilMeeting(this.address + 0x08);
+        }else if (opcode == 0x32) {
             return AldermanMission(this.address + 0x08);
         } else {
             return ScheduledTaskUnknown(this.address + 0x08, opcode);

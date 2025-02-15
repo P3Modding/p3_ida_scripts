@@ -4,8 +4,29 @@
 static handle_scheduled_task() {
     auto edi = GetRegValue("edi");
     auto task = ScheduledTask(edi);
-    if (task.get_opcode() == 1) {
-        Message("handle_scheduled_task %s\n", task.to_string());
+
+    // Ignore requent tasks
+    if (task.get_opcode() == 0x00) {
+        return 0;
+    } else if (task.get_opcode() == 0x04) {
+        return 0;
+    } else if (task.get_opcode() == 0x0d) {
+        return 0;
+    } else if (task.get_opcode() == 0x19) {
+        return 0;
+    } else if (task.get_opcode() == 0x1a) {
+        return 0;
+    } else if (task.get_opcode() == 0x1b) {
+        return 0;
+    } else if (task.get_opcode() == 0x25) {
+        return 0;
+    } else if (task.get_opcode() == 0x26) {
+        return 0;
+    }
+
+    Message("handle_scheduled_task %s\n", task.to_string());
+
+    if (task.get_opcode() == 0x01) {
         if (task.get_data().get_receiving_index() == 0x24) {
             return 1;
         }
