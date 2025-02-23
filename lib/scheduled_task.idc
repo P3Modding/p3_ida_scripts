@@ -152,15 +152,20 @@ class ScheduledTaskCouncilMeeting {
         return Byte(this.address + 0x09);
     }
 
+    get_player_vote_bitmask() {
+        return Byte(this.address + 0x0b);
+    }
+
     to_string() {
         return form(
-            "ScheduledTaskCouncilMeeting(address=0x%x, meeting_type=%d, field_6=0x%x, remaining=%d, yes=%d, no=%d)",
+            "ScheduledTaskCouncilMeeting(address=0x%x, meeting_type=%d, pending_yes=0x%x, remaining_no=%d, yes=%d, no=%d, player_bitmap=%b)",
             this.address,
             this.get_meeting_type(),
             this.get_field_6(),
             this.get_votes_remaining(),
             this.get_votes_in_favour(),
-            this.get_votes_against());
+            this.get_votes_against(),
+            this.get_player_vote_bitmask());
     }
 }
 

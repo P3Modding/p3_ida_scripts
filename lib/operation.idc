@@ -223,7 +223,7 @@ class OperationMakeTownHallOffer {
     }
 
     get_meeting_timestamp() {
-        return Byte(this.address + 0x00);
+        return Dword(this.address + 0x00);
     }
 
     get_town_index() {
@@ -236,8 +236,9 @@ class OperationMakeTownHallOffer {
 
     to_string() {
         return form(
-            "OperationMakeTownHallOffer(address=%x, town_index=0x%x, meeting_type=%d)",
+            "OperationMakeTownHallOffer(address=%x, meeting_timestamp=0x%x, town_index=0x%x, meeting_type=%d)",
             this.address,
+            this.get_meeting_timestamp(),
             this.get_town_index(),
             this.get_meeting_type());
     }
