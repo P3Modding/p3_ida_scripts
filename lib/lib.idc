@@ -41,6 +41,7 @@
 #include "screen_rectangle.idc"
 #include "sea_battle_projectile.idc"
 #include "ship.idc"
+#include "short_point.idc"
 #include "timestamp.idc"
 #include "town.idc"
 #include "ui_money_lender_window.idc"

@@ -45,7 +45,7 @@ static handle_insert_operation() {
     auto operation = Operation(ptr);
     
     if (operation.opcode() == 0x00) {
-        return 0; // Set Ship Destination
+        return 1; // Set Ship Destination
     } else if (operation.opcode() == 0x0d) {
         return 0; // Toggle piracy
     } else if (operation.opcode() == 0x02) {
