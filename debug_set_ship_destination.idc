@@ -34,6 +34,12 @@ static handle_calculate_ship_path() {
     Message("handle_calculate_ship_path found starting navpoint\n");
 }
 
+static handle_calculate_ship_path_find_matrix_path() {
+    auto eax = GetRegValue("eax");
+    auto ship_nav_path = ShipNavPath(eax);
+    Message("matrix path: %s\n", ship_nav_path.to_string());
+}
+
 static handle_calculate_ship_path_first_point() {
     auto edx = GetRegValue("edx");
     auto x = Word(GetRegValue("eax") + 4 * edx);
@@ -78,12 +84,31 @@ static handle_ship_path_done() {
     Message("Finished route 0x%x with %d nodes\n", path_ptr, Dword(path_ptr + 0x04));
 }
 
+static handle_calculate_ship_path_find_matrix_path_update_candidate() {
+    auto esp = GetRegValue("esp");
+    auto calculated_destination_index = GetRegValue("edx");
+    auto calculated_source_index = GetRegValue("edi");
+    auto distance_old = TO_LONG(Dword(esp + 0x38));
+    auto distance_new = TO_LONG(GetRegValue("ecx"));
+    auto path_distance_new = GetRegValue("eax");
+
+    Message("%d -> %d (path_distance_new=%d, distance_new=%d)\n",
+        calculated_source_index,
+        calculated_destination_index,
+        path_distance_new,
+        distance_old,
+        distance_new);
+}
+
 static main() {
     AddBpt(0x00537686);
     SetBptCnd(0x00537686, "handle_op_set_ship_destination_fix()");
 
     AddBpt(0x00445340);
     SetBptCnd(0x00445340, "handle_calculate_ship_path()");
+
+    AddBpt(0x00445340);
+    SetBptCnd(0x00445340, "handle_calculate_ship_path_find_matrix_path()");
 
     AddBpt(0x004453E0);
     SetBptCnd(0x004453E0, "handle_calculate_ship_path_first_point()");
@@ -99,4 +124,7 @@ static main() {
 
     AddBpt(0x0051738B);
     SetBptCnd(0x0051738B, "handle_ship_path_done()");
+
+    AddBpt(0x00444B3B);
+    SetBptCnd(0x00444B3B, "handle_calculate_ship_path_find_matrix_path_update_candidate()");
 }

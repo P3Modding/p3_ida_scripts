@@ -153,6 +153,39 @@ class OperationAttackShip {
     }
 }
 
+// 0x26
+class OperationDemolishBuilding {
+    OperationDemolishBuilding(address) {
+        this.address = address;
+    }
+
+    get_town_index() {
+        return Dword(this.address + 0x00);
+    }
+
+    get_merchant_index() {
+        return Dword(this.address + 0x04);
+    }
+
+    get_x() {
+        return Dword(this.address + 0x08);
+    }
+
+    get_y() {
+        return Dword(this.address + 0x0c);
+    }
+
+    to_string() {
+        return form(
+            "OperationDemolishBuilding(address=%x, town_index=0x%x, merchant_index=0x%x, x=0x%x, y=0x%x)",
+            this.address,
+            this.get_town_index(),
+            this.get_merchant_index(),
+            this.get_x(),
+            this.get_y());
+    }
+}
+
 // 0x29
 class OperationGrantLoan {
     OperationGrantLoan(address) {
@@ -529,6 +562,8 @@ class Operation {
             return OperationTogglePiracy(this.address + 0x04);
         } else if (opcode == 0x0e) {
             return OperationAttackShip(this.address + 0x04);
+        } else if (opcode == 0x26) {
+            return OperationDemolishBuilding(this.address + 0x04);
         } else if (opcode == 0x29) {
             return OperationGrantLoan(this.address + 0x04);
         } else if (opcode == 0x48) {

@@ -40,6 +40,7 @@
 #include "scheduled_task.idc"
 #include "screen_rectangle.idc"
 #include "sea_battle_projectile.idc"
+#include "ship_nav_path.idc"
 #include "ship.idc"
 #include "short_point.idc"
 #include "timestamp.idc"
