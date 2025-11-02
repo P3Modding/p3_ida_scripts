@@ -31,6 +31,7 @@
 #include "class77.idc"
 #include "class84.idc"
 #include "class85.idc"
+#include "convoy.idc"
 #include "game_world.idc"
 #include "letter.idc"
 #include "loan_applicant.idc"

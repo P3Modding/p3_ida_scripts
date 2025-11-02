@@ -153,6 +153,29 @@ class OperationAttackShip {
     }
 }
 
+// 0x1f
+class OperationSetExpeditionLocation {
+    OperationSetExpeditionLocation(address) {
+        this.address = address;
+    }
+
+    get_convoy_index() {
+        return Word(this.address + 0x00);
+    }
+
+    get_destination_index() {
+        return Word(this.address + 0x02);
+    }
+
+    to_string() {
+        return form(
+            "OperationSetExpeditionLocation(address=%x, convoy_index=0x%x, destination_index=%d)",
+            this.address,
+            this.get_convoy_index(),
+            this.get_destination_index());
+    }
+}
+
 // 0x26
 class OperationDemolishBuilding {
     OperationDemolishBuilding(address) {
@@ -562,6 +585,8 @@ class Operation {
             return OperationTogglePiracy(this.address + 0x04);
         } else if (opcode == 0x0e) {
             return OperationAttackShip(this.address + 0x04);
+        } else if (opcode == 0x1f) {
+            return OperationSetExpeditionLocation(this.address + 0x04);
         } else if (opcode == 0x26) {
             return OperationDemolishBuilding(this.address + 0x04);
         } else if (opcode == 0x29) {

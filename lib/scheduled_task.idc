@@ -118,6 +118,33 @@ class ScheduledTaskInvestigation {
     }
 }
 
+// 0x12
+class ScheduledTaskExpedition {
+    ScheduledTaskExpedition(address) {
+        this.address = address;
+    }
+
+    get_convoy_index() {
+        return Word(this.address + 0x00);
+    }
+
+    get_field_2() {
+        return Word(this.address + 0x02);
+    }
+
+    get_departure_timestamp() {
+        return Dword(this.address + 0x04);
+    }
+
+    to_string() {
+        return sprintf("ScheduledTaskExpedition(address=0x%04x, convoy_index=0x%x, field_2=0x%x, departure_timestamp=0x%x)",
+                this.address,
+                this.get_convoy_index(),
+                this.get_field_2(),
+                this.get_departure_timestamp());
+    }
+}
+
 // 0x2e
 class ScheduledTaskCouncilMeeting {
     ScheduledTaskCouncilMeeting(address) {
@@ -192,9 +219,11 @@ class ScheduledTask {
             return ScheduledTaskRepayment(this.address + 0x08);
         } else if (opcode == 0x05) {
             return ScheduledTaskInvestigation(this.address + 0x08);
+        } else if (opcode == 0x12) {
+            return ScheduledTaskExpedition(this.address + 0x08);
         } else if (opcode == 0x2e) {
             return ScheduledTaskCouncilMeeting(this.address + 0x08);
-        }else if (opcode == 0x32) {
+        } else if (opcode == 0x32) {
             return AldermanMission(this.address + 0x08);
         } else {
             return ScheduledTaskUnknown(this.address + 0x08, opcode);

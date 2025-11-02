@@ -28,8 +28,10 @@ static handle_scheduled_task() {
 
     if (task.get_opcode() == 0x01) {
         if (task.get_data().get_receiving_index() == 0x24) {
-            return 1;
+            return 1; // Repayment to player
         }
+    } else if (task.get_opcode() == 0x12) {
+        return 1; // Expedition
     }
 }
 

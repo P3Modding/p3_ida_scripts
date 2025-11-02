@@ -13,3 +13,7 @@ static get_captain_by_index(captain_index) {
 static get_captains_size() {
     return Word(CLASS6_PTR + 0xf2);
 }
+
+static get_convoy_by_index(convoy_index) {
+    return Convoy(Dword(CLASS6_PTR + 0x08) + 0x3c * convoy_index);
+}
