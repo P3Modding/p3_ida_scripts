@@ -15,6 +15,22 @@ class GameWorld {
         this.address = GAME_WORLD_PTR;
     }
 
+    get_day_of_month() {
+        return Byte(this.address + 0x0000);
+    }
+
+    get_month() {
+        return Byte(this.address + 0x0001);
+    }
+
+    get_year() {
+        return Word(this.address + 0x0002);
+    }
+
+    get_day_of_year() {
+        return Word(this.address + 0x0004);
+    }
+
     get_merchant_facilities_array() {
         return Dword(this.address + 0x70);
     }
